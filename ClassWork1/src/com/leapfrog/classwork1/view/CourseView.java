@@ -22,53 +22,45 @@ public class CourseView {
         this.input = input;
         this.courseService = courseService;
     }
-    
+
     public void submenu() {
-        
-        System.out.println("1. Add Record");
-        System.out.println("2. Delete Record");
-        System.out.println("3. Get Record ById");
-        System.out.println("4. Get All Records");
-        System.out.println("5. Exit");
-        System.out.println("Enter your Choice [1-5]: ");
+
+        System.out.println("1. Add Course Record");
+        System.out.println("2. Delete Course Record");
+        System.out.println("3. Get Course Record ById");
+        System.out.println("4. Get All Course Records");
+        System.out.println("5. Go Back");
+        System.out.println("6. Exit");
+        System.out.println("Enter your Choice [1-6]: ");
         System.out.println("---------------------------");
-        switch (input.nextInt())
-        {
-            case 1:
-                addCourse();
-                break;
-            case 2:
-                deleteCourse();
-                break;
-        }
-            
-            
-        
     }
 
     public void addCourse() {
 
-        System.out.println("=============Add Course==================");
+        System.out.println("===========Add Course Records==============");
         while (true) {
             Course cc = new Course();
 
             System.out.println("Enter Course Id: ");
             cc.setId(input.nextInt());
+            
+            input.nextLine();
             System.out.println("Enter Course Name: ");
-            cc.setName(input.next());
+            cc.setName(input.nextLine());
             System.out.println("Enter Course Description: ");
-            cc.setDescritpion(input.next());
+            cc.setDescritpion(input.nextLine());
             System.out.println("Enter Course Duration: ");
-            cc.setDuration(input.next());
+            cc.setDuration(input.nextLine());
             System.out.println("Enter Course Time: ");
-            cc.setTime(input.next());
+            cc.setTime(input.nextLine());
             System.out.println("Enter Course Status: ");
             cc.setStatus(input.nextBoolean());
             courseService.insert(cc);
             System.out.println("The Course Records have been saved.");
-            System.out.println("Do you want to add more[Y/N");
+            
+            System.out.println("Do you want to add more[Y/N]");
             if (input.next().equalsIgnoreCase("n")) {
-                break;
+               break;
             }
         }
     }
@@ -78,11 +70,27 @@ public class CourseView {
             System.out.println("Enter the Course Id you want to delete: ");
             courseService.delete(input.nextInt());
             System.out.println("The Course Records has been deleted.");
-            
-            System.out.println("Do you want to add more[Y/N");
+
+            System.out.println("Do you want to delete more[Y/N]");
             if (input.next().equalsIgnoreCase("n")) {
                 break;
             }
+
+        }
+    }
+
+    public void showByIdCourse() {
+        while (true) {
+            System.out.println("Enter the Course Id you want to view: ");
+            Course course = courseService.getById(input.nextInt());
+            if (course != null) {
+                System.out.println("The Course Records is: " + course.toString());
+            }
+            System.out.println("Do you want to view more Course Records ?[Y/N]");
+            if (input.next().equalsIgnoreCase("n")) {
+                break;
+            }
+
         }
     }
 
@@ -91,13 +99,36 @@ public class CourseView {
         courseService.getAll().forEach((c -> {
             System.out.println(c);
         }));
+
     }
 
-    public void showByIdCourse() {
-        System.out.println("Enter the Course Id you want to view: ");
-        Course course=courseService.getById(input.nextInt());
-        if(course!=null){
-            System.out.println("The Course Records is: " + course.toString() );
+    public void courseController() {
+        boolean back = false;
+        while (true) {
+            submenu();
+            switch (input.nextInt()) {
+                case 1:
+                    addCourse();
+                    break;
+                case 2:
+                    deleteCourse();
+                    break;
+                case 3:
+                    showByIdCourse();
+                    break;
+                case 4:
+                    showAllCourse();
+                    break;
+                case 5:
+                    back = true;
+                    break;
+                case 6:
+                    System.exit(0);
+                    break;
+            }
+            if (back){
+                break;
+            }
         }
     }
 }
